@@ -3,6 +3,7 @@ package com.ptit.backend.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ptit.backend.dto.request.FirebaseLoginRequest;
 import com.ptit.backend.dto.request.LoginRequest;
 import com.ptit.backend.dto.response.ApiResponse;
 import com.ptit.backend.dto.response.LoginResponse;
@@ -14,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
 
 /**
  * AuthenticationController
@@ -30,15 +30,30 @@ public class AuthenticationController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest request){
+    public ResponseEntity<ApiResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest request) {
         LoginResponse result = authService.login(request);
 
-        ApiResponse<LoginResponse> response = ApiResponse.<LoginResponse> builder()
-            .code(SUCCESS_CODE)
-            .message(SUCCESS_MESSAGE)
-            .result(result)
-            .build();
+        ApiResponse<LoginResponse> response = ApiResponse.<LoginResponse>builder()
+                .code(SUCCESS_CODE)
+                .message(SUCCESS_MESSAGE)
+                .result(result)
+                .build();
 
         return ResponseEntity.ok(response);
-    } 
+    }
+
+    @PostMapping("/google")
+    public ResponseEntity<ApiResponse<LoginResponse>> loginWithGoogle(
+            @Valid @RequestBody FirebaseLoginRequest request) {
+        LoginResponse result = authService.loginWithGoogle(request.getIdToken());
+
+        ApiResponse<LoginResponse> response = ApiResponse.<LoginResponse>builder()
+                .code(SUCCESS_CODE)
+                .message(SUCCESS_MESSAGE)
+                .result(result)
+                .build();
+
+        return ResponseEntity.ok(response);
+    }
+
 }
