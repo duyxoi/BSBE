@@ -1,39 +1,39 @@
-USE db_bookstore;
-
-SET FOREIGN_KEY_CHECKS = 0;
-
-TRUNCATE TABLE `chat_message`;
-TRUNCATE TABLE `chat_session`;
-TRUNCATE TABLE `payment_transaction`;
-TRUNCATE TABLE `review`;
-TRUNCATE TABLE `inventory_log`;
-TRUNCATE TABLE `point_transaction`;
-TRUNCATE TABLE `import_detail`;
-TRUNCATE TABLE `book_import`;
-TRUNCATE TABLE `rental`;
-TRUNCATE TABLE `order_detail`;
-TRUNCATE TABLE `orders`;
-TRUNCATE TABLE `cart_item`;
-TRUNCATE TABLE `cart`;
-TRUNCATE TABLE `book_category`;
-TRUNCATE TABLE `book_author`;
-TRUNCATE TABLE `book_item`;
-TRUNCATE TABLE `book`;
-TRUNCATE TABLE `promotion`;
-TRUNCATE TABLE `supplier`;
-TRUNCATE TABLE `publisher`;
-TRUNCATE TABLE `author`;
-TRUNCATE TABLE `category`;
-TRUNCATE TABLE `user`;
-TRUNCATE TABLE `role`;
-
-SET FOREIGN_KEY_CHECKS = 1;
+-- =========================================================
+-- 0. LÀM SẠCH DỮ LIỆU & RESET IDENTITY
+-- =========================================================
+TRUNCATE TABLE 
+    chat_message,
+    chat_session,
+    payment_transaction,
+    review,
+    inventory_log,
+    point_transaction,
+    import_detail,
+    book_import,
+    rental,
+    order_detail,
+    orders,
+    cart_item,
+    cart,
+    flash_sale_item,
+    flash_sale_campaign,
+    book_category,
+    book_author,
+    book_item,
+    book,
+    promotion,
+    supplier,
+    publisher,
+    author,
+    category,
+    app_user,
+    app_role
+RESTART IDENTITY CASCADE;
 
 -- =========================================================
--- 1. ROLE
+-- 1. APP_ROLE
 -- =========================================================
-INSERT INTO `role`
-(`role_id`, `role_name`, `description`)
+INSERT INTO app_role (role_id, role_name, description)
 VALUES (1, 'ROLE_ADMIN', 'Quản trị viên toàn hệ thống, quản lý nhân sự và cấu hình'),
        (2, 'ROLE_STAFF', 'Nhân viên cửa hàng, xử lý đơn hàng, hỗ trợ khách hàng và xem tồn kho'),
        (3, 'ROLE_USER', 'Khách hàng mua sắm và sử dụng dịch vụ trực tuyến');
@@ -41,8 +41,7 @@ VALUES (1, 'ROLE_ADMIN', 'Quản trị viên toàn hệ thống, quản lý nhâ
 -- =========================================================
 -- 2. CATEGORY
 -- =========================================================
-INSERT INTO `category`
-(`category_id`, `parent_id`, `name`)
+INSERT INTO category (category_id, parent_id, name)
 VALUES (1, NULL, 'Văn học'),
        (2, NULL, 'Kinh tế'),
        (3, NULL, 'Thiếu nhi'),
@@ -71,8 +70,7 @@ VALUES (1, NULL, 'Văn học'),
 -- =========================================================
 -- 3. AUTHOR
 -- =========================================================
-INSERT INTO `author`
-(`author_id`, `name`, `biography`)
+INSERT INTO author (author_id, name, biography)
 VALUES (1, 'Nguyễn Nhật Ánh', 'Tác giả nổi tiếng với các tác phẩm tuổi học trò.'),
        (2, 'Dale Carnegie', 'Tác giả sách kỹ năng sống nổi tiếng thế giới.'),
        (3, 'Robert Kiyosaki', 'Tác giả sách tài chính cá nhân.'),
@@ -127,8 +125,7 @@ VALUES (1, 'Nguyễn Nhật Ánh', 'Tác giả nổi tiếng với các tác ph�
 -- =========================================================
 -- 4. PUBLISHER
 -- =========================================================
-INSERT INTO `publisher`
-(`publisher_id`, `name`, `contact_email`, `phone`, `address`)
+INSERT INTO publisher (publisher_id, name, contact_email, phone, address)
 VALUES (1, 'NXB Trẻ', 'contact@nxbtre.vn', '02838223344', 'TP. Hồ Chí Minh'),
        (2, 'NXB Kim Đồng', 'info@kimdong.vn', '02439434730', 'Hà Nội'),
        (3, 'NXB Lao Động', 'support@nxblaodong.vn', '02437734567', 'Hà Nội'),
@@ -143,8 +140,7 @@ VALUES (1, 'NXB Trẻ', 'contact@nxbtre.vn', '02838223344', 'TP. Hồ Chí Minh'
 -- =========================================================
 -- 5. SUPPLIER
 -- =========================================================
-INSERT INTO `supplier`
-(`supplier_id`, `name`, `phone`, `address`)
+INSERT INTO supplier (supplier_id, name, phone, address)
 VALUES (1, 'Công ty Sách Miền Bắc', '0911000001', 'Hà Nội'),
        (2, 'Công ty Sách Miền Nam', '0911000002', 'TP. Hồ Chí Minh'),
        (3, 'Nhà cung cấp Alpha', '0911000003', 'Đà Nẵng'),
@@ -159,8 +155,7 @@ VALUES (1, 'Công ty Sách Miền Bắc', '0911000001', 'Hà Nội'),
 -- =========================================================
 -- 6. PROMOTION
 -- =========================================================
-INSERT INTO `promotion`
-(`promotion_id`, `code`, `discount_percent`, `max_discount_amount`, `min_order_value`, `usage_limit`, `used_count`, `start_date`, `end_date`, `status`)
+INSERT INTO promotion (promotion_id, code, discount_percent, max_discount_amount, min_order_value, usage_limit, used_count, start_date, end_date, status)
 VALUES (1, 'WELCOME10', 10.0, 50000, 100000, 100, 5, '2026-01-01 00:00:00', '2026-12-31 23:59:59', 1),
        (2, 'BOOK20', 20.0, 80000, 200000, 50, 10, '2026-01-01 00:00:00', '2026-06-30 23:59:59', 1),
        (3, 'SUMMER15', 15.0, 60000, 150000, 80, 12, '2026-04-01 00:00:00', '2026-08-31 23:59:59', 1),
@@ -173,10 +168,9 @@ VALUES (1, 'WELCOME10', 10.0, 50000, 100000, 100, 5, '2026-01-01 00:00:00', '202
        (10, 'OLDBOOK10', 10.0, 30000, 70000, 60, 4, '2026-01-01 00:00:00', '2026-12-31 23:59:59', 1);
 
 -- =========================================================
--- 7. USER
+-- 7. APP_USER
 -- =========================================================
-INSERT INTO `user`
-(`user_id`, `role_id`, `username`, `password`, `email`, `phone`, `address`, `full_name`, `total_points`, `status`)
+INSERT INTO app_user (user_id, role_id, username, password, email, phone, address, full_name, total_points, status)
 VALUES (1, 1, 'admin01', '$2a$10$4k6fcDGBdjgVI3OesCJmOuqkVBwCpUQ2KmAlnVkDWWEtu3mgua9Nu', 'admin01@bookstore.vn', '0901000001', 'Hà Nội', 'Quản trị viên 01', 0, 1),
        (2, 2, 'staff01', '$2a$10$4k6fcDGBdjgVI3OesCJmOuqkVBwCpUQ2KmAlnVkDWWEtu3mgua9Nu', 'staff01@bookstore.vn', '0901000002', 'Hà Nội', 'Nhân viên 01', 0, 1),
        (3, 2, 'staff02', '$2a$10$4k6fcDGBdjgVI3OesCJmOuqkVBwCpUQ2KmAlnVkDWWEtu3mgua9Nu', 'staff02@bookstore.vn', '0901000003', 'TP. Hồ Chí Minh', 'Nhân viên 02', 0, 1),
@@ -192,10 +186,8 @@ VALUES (1, 1, 'admin01', '$2a$10$4k6fcDGBdjgVI3OesCJmOuqkVBwCpUQ2KmAlnVkDWWEtu3m
 
 -- =========================================================
 -- 8. BOOK - 100 CUỐN
--- Ảnh bìa: ưu tiên Open Library Covers API cho sách phổ biến, dùng ảnh sách chất lượng cao từ Unsplash cho sách seed/tổng hợp.
 -- =========================================================
-INSERT INTO `book`
-(`book_id`, `publisher_id`, `title`, `publication_year`, `language`, `original_price`, `selling_price`, `total_stock`, `description`, `cover_image`, `status`)
+INSERT INTO book (book_id, publisher_id, title, publication_year, language, original_price, selling_price, total_stock, description, cover_image, status)
 VALUES (1, 1, 'Cho Tôi Xin Một Vé Đi Tuổi Thơ', 2018, 'Tiếng Việt', 55000, 78000, 20, 'Tác phẩm nổi tiếng của Nguyễn Nhật Ánh.', 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=800&q=85', 1),
        (2, 3, 'Đắc Nhân Tâm', 2020, 'Tiếng Việt', 60000, 90000, 25, 'Sách kỹ năng giao tiếp kinh điển.', 'https://covers.openlibrary.org/b/isbn/9780671027032-L.jpg', 1),
        (3, 3, 'Cha Giàu Cha Nghèo', 2021, 'Tiếng Việt', 65000, 98000, 18, 'Sách tài chính cá nhân nổi tiếng.', 'https://covers.openlibrary.org/b/isbn/9781612680194-L.jpg', 1),
@@ -300,8 +292,7 @@ VALUES (1, 1, 'Cho Tôi Xin Một Vé Đi Tuổi Thơ', 2018, 'Tiếng Việt', 
 -- =========================================================
 -- 9. BOOK_ITEM - 100 BẢN GHI
 -- =========================================================
-INSERT INTO `book_item`
-(`book_item_id`, `book_id`, `barcode`, `condition_type`, `condition_note`, `deposit_amount`, `current_rental_price`, `is_for_rent`, `status`, `position`)
+INSERT INTO book_item (book_item_id, book_id, barcode, condition_type, condition_note, deposit_amount, current_rental_price, is_for_rent, status, position)
 VALUES (1, 1, 'BC0001', 'Mới', 'Sách mới 100%', 27000, 9000, 1, 'Sẵn sàng', 'Kệ A1'),
        (2, 2, 'BC0002', 'Mới', 'Sách mới 100%', 31000, 11000, 1, 'Sẵn sàng', 'Kệ A2'),
        (3, 3, 'BC0003', 'Mới', 'Sách mới 100%', 34000, 12000, 1, 'Đang thuê', 'Kệ A3'),
@@ -368,7 +359,7 @@ VALUES (1, 1, 'BC0001', 'Mới', 'Sách mới 100%', 27000, 9000, 1, 'Sẵn sàn
        (64, 64, 'BC0064', 'Cũ', 'Sách cũ, tình trạng còn tốt', 86000, 29000, 1, 'Đã bán', 'Kệ G4'),
        (65, 65, 'BC0065', 'Mới', 'Sách mới 100%', 51000, 17000, 1, 'Sẵn sàng', 'Kệ G5'),
        (66, 66, 'BC0066', 'Mới', 'Sách mới 100%', 63000, 22000, 1, 'Sẵn sàng', 'Kệ G6'),
-       (67, 67, 'BC0067', 'Mới', 'Sách mới 100%', 77000, 26000, 1, 'Sẵn sàng', 'Kệ G7'),
+(67, 67, 'BC0067', 'Mới', 'Sách mới 100%', 77000, 26000, 1, 'Sẵn sàng', 'Kệ G7'),
        (68, 68, 'BC0068', 'Cũ', 'Sách cũ, tình trạng còn tốt', 54000, 19000, 1, 'Sẵn sàng', 'Kệ G8'),
        (69, 69, 'BC0069', 'Mới', 'Sách mới 100%', 51000, 17000, 1, 'Sẵn sàng', 'Kệ G9'),
        (70, 70, 'BC0070', 'Mới', 'Sách mới 100%', 59000, 20000, 1, 'Sẵn sàng', 'Kệ G10'),
@@ -406,8 +397,7 @@ VALUES (1, 1, 'BC0001', 'Mới', 'Sách mới 100%', 27000, 9000, 1, 'Sẵn sàn
 -- =========================================================
 -- 10. BOOK_AUTHOR
 -- =========================================================
-INSERT INTO `book_author`
-(`book_id`, `author_id`, `author_role`)
+INSERT INTO book_author (book_id, author_id, author_role)
 VALUES (1, 1, 'Tác giả chính'),
        (2, 2, 'Tác giả chính'),
        (3, 3, 'Tác giả chính'),
@@ -512,8 +502,7 @@ VALUES (1, 1, 'Tác giả chính'),
 -- =========================================================
 -- 11. BOOK_CATEGORY
 -- =========================================================
-INSERT INTO `book_category`
-(`book_id`, `category_id`, `is_primary`)
+INSERT INTO book_category (book_id, category_id, is_primary)
 VALUES (1, 19, 1),
        (2, 4, 1),
        (3, 13, 1),
@@ -618,8 +607,7 @@ VALUES (1, 19, 1),
 -- =========================================================
 -- 12. CART
 -- =========================================================
-INSERT INTO `cart`
-(`cart_id`, `user_id`)
+INSERT INTO cart (cart_id, user_id)
 VALUES (1, 4),
        (2, 5),
        (3, 6),
@@ -633,8 +621,7 @@ VALUES (1, 4),
 -- =========================================================
 -- 13. CART_ITEM
 -- =========================================================
-INSERT INTO `cart_item`
-(`cart_item_id`, `cart_id`, `book_id`, `quantity`)
+INSERT INTO cart_item (cart_item_id, cart_id, book_id, quantity)
 VALUES (1, 1, 1, 1),
        (2, 1, 15, 2),
        (3, 2, 3, 1),
@@ -653,8 +640,7 @@ VALUES (1, 1, 1, 1),
 -- =========================================================
 -- 14. ORDERS
 -- =========================================================
-INSERT INTO `orders`
-(`order_id`, `user_id`, `promotion_id`, `points_used`, `promotion_discount_amount`, `point_discount_amount`, `total_amount`, `shipping_address`, `payment_method`, `payment_status`, `order_status`)
+INSERT INTO orders (order_id, user_id, promotion_id, points_used, promotion_discount_amount, point_discount_amount, total_amount, shipping_address, payment_method, payment_status, order_status)
 VALUES (1, 4, 1, 10, 15000, 10000, 143000, 'Cầu Giấy, Hà Nội', 'COD', 'Chưa thanh toán', 'Chờ duyệt'),
        (2, 5, 3, 0, 20000, 0, 125000, 'Hai Bà Trưng, Hà Nội', 'VNPAY', 'Đã thanh toán', 'Chờ giao hàng'),
        (3, 6, NULL, 20, 0, 20000, 78000, 'Đống Đa, Hà Nội', 'MOMO', 'Đã thanh toán', 'Chờ giao hàng'),
@@ -671,8 +657,7 @@ VALUES (1, 4, 1, 10, 15000, 10000, 143000, 'Cầu Giấy, Hà Nội', 'COD', 'Ch
 -- =========================================================
 -- 15. ORDER_DETAIL
 -- =========================================================
-INSERT INTO `order_detail`
-(`order_detail_id`, `order_id`, `book_id`, `quantity`, `unit_price`)
+INSERT INTO order_detail (order_detail_id, order_id, book_id, quantity, unit_price)
 VALUES (1, 1, 1, 1, 78000),
        (2, 1, 2, 1, 90000),
        (3, 2, 4, 1, 135000),
@@ -693,8 +678,7 @@ VALUES (1, 1, 1, 1, 78000),
 -- =========================================================
 -- 16. RENTAL
 -- =========================================================
-INSERT INTO `rental`
-(`rental_id`, `user_id`, `book_item_id`, `rent_date`, `due_date`, `return_date`, `actual_deposit`, `rental_fee`, `penalty_fee`, `payment_method`, `payment_status`, `status`)
+INSERT INTO rental (rental_id, user_id, book_item_id, rent_date, due_date, return_date, actual_deposit, rental_fee, penalty_fee, payment_method, payment_status, status)
 VALUES (1, 4, 1, '2026-04-01 09:00:00', '2026-04-08 09:00:00', '2026-04-07 10:00:00', 30000, 10000, 0, 'Tiền mặt', 'Đã hoàn cọc', 'Đã trả'),
        (2, 5, 2, '2026-04-02 10:00:00', '2026-04-09 10:00:00', NULL, 35000, 12000, 0, 'MOMO', 'Đã thu cọc', 'Đang thuê'),
        (3, 6, 3, '2026-04-03 11:00:00', '2026-04-10 11:00:00', '2026-04-12 12:00:00', 25000, 9000, 5000, 'Tiền mặt', 'Đã hoàn cọc', 'Đã trả'),
@@ -709,8 +693,7 @@ VALUES (1, 4, 1, '2026-04-01 09:00:00', '2026-04-08 09:00:00', '2026-04-07 10:00
 -- =========================================================
 -- 17. BOOK_IMPORT
 -- =========================================================
-INSERT INTO `book_import`
-(`import_id`, `supplier_id`, `user_id`, `import_date`, `total_cost`)
+INSERT INTO book_import (import_id, supplier_id, user_id, import_date, total_cost)
 VALUES (1, 1, 2, '2026-03-01 09:00:00', 6744000),
        (2, 2, 3, '2026-03-02 10:00:00', 4982000),
        (3, 3, 2, '2026-03-03 11:00:00', 6790000),
@@ -735,8 +718,7 @@ VALUES (1, 1, 2, '2026-03-01 09:00:00', 6744000),
 -- =========================================================
 -- 18. IMPORT_DETAIL - 100 DÒNG NHẬP SÁCH
 -- =========================================================
-INSERT INTO `import_detail`
-(`import_detail_id`, `import_id`, `book_id`, `quantity`, `import_price`)
+INSERT INTO import_detail (import_detail_id, import_id, book_id, quantity, import_price)
 VALUES (1, 1, 1, 8, 55000),
        (2, 2, 2, 11, 60000),
        (3, 3, 3, 14, 65000),
@@ -841,8 +823,7 @@ VALUES (1, 1, 1, 8, 55000),
 -- =========================================================
 -- 19. POINT_TRANSACTION
 -- =========================================================
-INSERT INTO `point_transaction`
-(`transaction_id`, `user_id`, `order_id`, `rental_id`, `points_changed`, `reason`)
+INSERT INTO point_transaction (transaction_id, user_id, order_id, rental_id, points_changed, reason)
 VALUES (1, 4, 1, NULL, 15, 'Tích điểm từ mua hàng'),
        (2, 5, 2, NULL, 12, 'Tích điểm từ mua hàng'),
        (3, 6, 3, NULL, 8, 'Tích điểm từ mua hàng'),
@@ -859,8 +840,7 @@ VALUES (1, 4, 1, NULL, 15, 'Tích điểm từ mua hàng'),
 -- =========================================================
 -- 20. INVENTORY_LOG
 -- =========================================================
-INSERT INTO `inventory_log`
-(`log_id`, `user_id`, `book_item_id`, `action_type`, `reference_order_id`, `reference_import_id`, `reference_rental_id`, `note`)
+INSERT INTO inventory_log (log_id, user_id, book_item_id, action_type, reference_order_id, reference_import_id, reference_rental_id, note)
 VALUES (1, 2, 1, 'Nhập mới', NULL, 1, NULL, 'Nhập sách mới vào kho'),
        (2, 3, 2, 'Nhập mới', NULL, 2, NULL, 'Nhập sách mới vào kho'),
        (3, 2, 3, 'Nhập mới', NULL, 3, NULL, 'Nhập sách mới vào kho'),
@@ -895,8 +875,7 @@ VALUES (1, 2, 1, 'Nhập mới', NULL, 1, NULL, 'Nhập sách mới vào kho'),
 -- =========================================================
 -- 21. REVIEW
 -- =========================================================
-INSERT INTO `review`
-(`review_id`, `user_id`, `book_id`, `rating`, `comment`, `is_approved`)
+INSERT INTO review (review_id, user_id, book_id, rating, comment, is_approved)
 VALUES (1, 4, 1, 5, 'Nội dung thực tế và hữu ích.', 1),
        (2, 5, 2, 4, 'Giao hàng nhanh, sách còn mới.', 1),
        (3, 6, 3, 5, 'Phù hợp để đọc cuối tuần.', 1),
@@ -951,8 +930,7 @@ VALUES (1, 4, 1, 5, 'Nội dung thực tế và hữu ích.', 1),
 -- =========================================================
 -- 22. PAYMENT_TRANSACTION
 -- =========================================================
-INSERT INTO `payment_transaction`
-(`payment_id`, `order_id`, `provider`, `provider_transaction_id`, `amount`, `status`, `response_code`)
+INSERT INTO payment_transaction (payment_id, order_id, provider, provider_transaction_id, amount, status, response_code)
 VALUES (1, 2, 'VNPAY', 'VNPAY_TXN_0001', 125000, 'SUCCESS', '00'),
        (2, 3, 'MOMO', 'MOMO_TXN_0002', 78000, 'SUCCESS', '00'),
        (3, 4, 'BANKING', 'BANK_TXN_0003', 250000, 'SUCCESS', '00'),
@@ -969,8 +947,7 @@ VALUES (1, 2, 'VNPAY', 'VNPAY_TXN_0001', 125000, 'SUCCESS', '00'),
 -- =========================================================
 -- 23. CHAT_SESSION
 -- =========================================================
-INSERT INTO `chat_session`
-(`session_id`, `user_id`, `started_at`, `ended_at`, `status`)
+INSERT INTO chat_session (session_id, user_id, started_at, ended_at, status)
 VALUES (1, 4, '2026-04-10 08:00:00', '2026-04-10 08:10:00', 'CLOSED'),
        (2, 5, '2026-04-10 09:00:00', '2026-04-10 09:05:00', 'CLOSED'),
        (3, 6, '2026-04-10 10:00:00', NULL, 'ACTIVE'),
@@ -982,45 +959,45 @@ VALUES (1, 4, '2026-04-10 08:00:00', '2026-04-10 08:10:00', 'CLOSED'),
        (9, 4, '2026-04-11 10:30:00', NULL, 'ACTIVE'),
        (10, NULL, '2026-04-11 11:30:00', NULL, 'ACTIVE');
 
--- =========================================================
--- 24. CHAT_MESSAGE
--- =========================================================
-INSERT INTO `chat_message`
-(`message_id`, `session_id`, `sender_type`, `content`)
-VALUES (1, 1, 'USER', 'Shop còn sách Đắc Nhân Tâm không?'),
-       (2, 1, 'BOT', 'Dạ còn ạ, hiện sách đang có sẵn trong kho.'),
-       (3, 2, 'USER', 'Tôi muốn kiểm tra đơn hàng #2'),
-       (4, 2, 'BOT', 'Đơn hàng của bạn đang được giao.'),
-       (5, 3, 'USER', 'Làm sao để thuê sách?'),
-       (6, 3, 'BOT', 'Bạn chọn sách, đặt cọc và xác nhận thời gian thuê.'),
-       (7, 4, 'USER', 'Tôi có thể dùng mã giảm giá nào?'),
-       (8, 4, 'BOT', 'Bạn có thể dùng mã WELCOME10 hoặc SUMMER15 nếu đủ điều kiện.'),
-       (9, 5, 'USER', 'Shop mở cửa đến mấy giờ?'),
-       (10, 5, 'BOT', 'Shop mở cửa từ 8h đến 21h hằng ngày.');
+-- 23. Chèn chat_session trước
+INSERT INTO chat_session (session_id, user_id, started_at, ended_at, status)
+VALUES (1, 4, '2026-04-10 08:00:00', '2026-04-10 08:10:00', 'CLOSED'),
+       (2, 5, '2026-04-10 09:00:00', '2026-04-10 09:05:00', 'CLOSED'),
+       (3, 6, '2026-04-10 10:00:00', NULL, 'ACTIVE'),
+       (4, 7, '2026-04-10 11:00:00', '2026-04-10 11:07:00', 'CLOSED'),
+       (5, 8, '2026-04-10 12:00:00', NULL, 'ACTIVE'),
+       (6, NULL, '2026-04-10 13:00:00', '2026-04-10 13:03:00', 'CLOSED'),
+       (7, 9, '2026-04-11 08:30:00', NULL, 'ACTIVE'),
+       (8, 10, '2026-04-11 09:30:00', '2026-04-11 09:35:00', 'CLOSED'),
+       (9, 4, '2026-04-11 10:30:00', NULL, 'ACTIVE'),
+       (10, NULL, '2026-04-11 11:30:00', NULL, 'ACTIVE')
+ON CONFLICT (session_id) DO NOTHING;
+
+
+
 
 -- =========================================================
--- RESET AUTO_INCREMENT SAU KHI INSERT ID THỦ CÔNG
+-- RESET IDENTITY SAU KHI INSERT ID THỦ CÔNG
 -- =========================================================
-ALTER TABLE `role` AUTO_INCREMENT = 4;
-ALTER TABLE `category` AUTO_INCREMENT = 25;
-ALTER TABLE `author` AUTO_INCREMENT = 51;
-ALTER TABLE `publisher` AUTO_INCREMENT = 11;
-ALTER TABLE `supplier` AUTO_INCREMENT = 11;
-ALTER TABLE `promotion` AUTO_INCREMENT = 11;
-ALTER TABLE `user` AUTO_INCREMENT = 13;
-ALTER TABLE `book` AUTO_INCREMENT = 101;
-ALTER TABLE `book_item` AUTO_INCREMENT = 101;
-ALTER TABLE `cart` AUTO_INCREMENT = 10;
-ALTER TABLE `cart_item` AUTO_INCREMENT = 15;
-ALTER TABLE `orders` AUTO_INCREMENT = 13;
-ALTER TABLE `order_detail` AUTO_INCREMENT = 17;
-ALTER TABLE `rental` AUTO_INCREMENT = 11;
-ALTER TABLE `book_import` AUTO_INCREMENT = 21;
-ALTER TABLE `import_detail` AUTO_INCREMENT = 101;
-ALTER TABLE `point_transaction` AUTO_INCREMENT = 13;
-ALTER TABLE `inventory_log` AUTO_INCREMENT = 31;
-ALTER TABLE `review` AUTO_INCREMENT = 51;
-ALTER TABLE `payment_transaction` AUTO_INCREMENT = 13;
-ALTER TABLE `chat_session` AUTO_INCREMENT = 11;
-ALTER TABLE `chat_message` AUTO_INCREMENT = 11;
-
+ALTER TABLE app_role ALTER COLUMN role_id RESTART WITH 4;
+ALTER TABLE category ALTER COLUMN category_id RESTART WITH 25;
+ALTER TABLE author ALTER COLUMN author_id RESTART WITH 51;
+ALTER TABLE publisher ALTER COLUMN publisher_id RESTART WITH 11;
+ALTER TABLE supplier ALTER COLUMN supplier_id RESTART WITH 11;
+ALTER TABLE promotion ALTER COLUMN promotion_id RESTART WITH 11;
+ALTER TABLE app_user ALTER COLUMN user_id RESTART WITH 13;
+ALTER TABLE book ALTER COLUMN book_id RESTART WITH 101;
+ALTER TABLE book_item ALTER COLUMN book_item_id RESTART WITH 101;
+ALTER TABLE cart ALTER COLUMN cart_id RESTART WITH 10;
+ALTER TABLE cart_item ALTER COLUMN cart_item_id RESTART WITH 15;
+ALTER TABLE orders ALTER COLUMN order_id RESTART WITH 13;
+ALTER TABLE order_detail ALTER COLUMN order_detail_id RESTART WITH 17;
+ALTER TABLE rental ALTER COLUMN rental_id RESTART WITH 11;
+ALTER TABLE book_import ALTER COLUMN import_id RESTART WITH 21;
+ALTER TABLE import_detail ALTER COLUMN import_detail_id RESTART WITH 101;
+ALTER TABLE point_transaction ALTER COLUMN transaction_id RESTART WITH 13;
+ALTER TABLE inventory_log ALTER COLUMN log_id RESTART WITH 31;
+ALTER TABLE review ALTER COLUMN review_id RESTART WITH 51;
+ALTER TABLE payment_transaction ALTER COLUMN payment_id RESTART WITH 13;
+ALTER TABLE chat_session ALTER COLUMN session_id RESTART WITH 11;
+ALTER TABLE chat_message ALTER COLUMN message_id RESTART WITH 11;
