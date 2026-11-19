@@ -7,7 +7,6 @@ import com.ptit.backend.repository.UserRepository;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.security.KeyStore.PrivateKeyEntry;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import com.ptit.backend.dto.request.OrderItemRequest;
 import com.ptit.backend.dto.request.OrderRequest;
